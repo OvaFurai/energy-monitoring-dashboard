@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Energy Monitoring System</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <script src="{{ url_for('static', filename='js/chart.min.js') }}"></script>
+</head>
+
+<body>
+
+<div class="background"></div>
+
+<header>
+
+    <div class="title">
+
+        <h1>⚡ SMART ENERGY MONITORING SYSTEM</h1>
+
+        <p>Real-Time Electrical Monitoring Dashboard</p>
+
+    </div>
+
+    <div class="status">
+
+        <div class="status-card">
+
+            <span class="dot"></span>
+
+            <span id="connection">ONLINE</span>
+
+        </div>
+
+        <div class="clock">
+
+            <span id="clock">00:00:00</span>
+
+        </div>
+
+    </div>
+
+</header>
+
+<!-- ===========================================
+Dashboard Navigation
+=========================================== -->
+
+<section class="dashboard-tabs">
+
+    <button class="tab-btn active" id="pzemBtn">
+        PZEM Dashboard
+    </button>
+
+    <button class="tab-btn" id="meterBtn">
+        3-Phase Power Meter
+    </button>
+
+</section>
+
+<div id="pzemDashboard">
+
+<section class="cards">
+
+    <div class="card">
+        <h3>Voltage</h3>
+        <h1 id="voltage">0.00</h1>
+        <p>Volts (V)</p>
+    </div>
+
+    <div class="card">
+        <h3>Current</h3>
+        <h1 id="current">0.000</h1>
+        <p>Ampere (A)</p>
+    </div>
+
+    <div class="card">
+        <h3>Power</h3>
+        <h1 id="power">0.00</h1>
+        <p>Watts (W)</p>
+    </div>
+
+    <div class="card">
+        <h3>Energy</h3>
+        <h1 id="energy">0.000</h1>
+        <p>kWh</p>
+    </div>
+
+    <div class="card">
+        <h3>Frequency</h3>
+        <h1 id="frequency">0.0</h1>
+        <p>Hz</p>
+    </div>
+
+    <div class="card">
+        <h3>Power Factor</h3>
+        <h1 id="pf">0.00</h1>
+        <p>PF</p>
+    </div>
+
+</section>
+
+<section class="graphs">
+
+    <div class="graph-card">
+        <h2>Voltage History</h2>
+        <canvas id="voltageChart"></canvas>
+    </div>
+
+    <div class="graph-card">
+        <h2>Current History</h2>
+        <canvas id="currentChart"></canvas>
+    </div>
+
+    <div class="graph-card">
+        <h2>Power History</h2>
+        <canvas id="powerChart"></canvas>
+    </div>
+
+    <div class="graph-card">
+        <h2>Energy History</h2>
+        <canvas id="energyChart"></canvas>
+    </div>
+
+    <div class="graph-card">
+        <h2>Frequency History</h2>
+        <canvas id="frequencyChart"></canvas>
+    </div>
+
+    <div class="graph-card">
+        <h2>Power Factor History</h2>
+        <canvas id="pfChart"></canvas>
+    </div>
+
+</section>
+</div>
+
+    <!-- =====================================================
+3 PHASE POWER METER DASHBOARD
+===================================================== -->
+<div id="meterDashboard" style="display:none;">
+<section class="meter-table-section">
+
+<table class="meter-table">
+
+    <thead>
+
+        <tr>
+
+            <th>Parameter</th>
+            <th>Phase A</th>
+            <th>Phase B</th>
+            <th>Phase C</th>
+            <th>Graph</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        <tr>
+
+            <td>Voltage (V)</td>
+
+            <td id="va">0.0</td>
+
+            <td id="vb">0.0</td>
+
+            <td id="vc">0.0</td>
+
+            <td>
+
+                <a href="/graph/voltage" class="graph-link">
+                     View Graph
+                </a>
+
+            </td>
+
+        </tr>
+
+        <tr>
+
+            <td>Current (A)</td>
+
+            <td id="ia">0.00</td>
+
+            <td id="ib">0.00</td>
+
+            <td id="ic">0.00</td>
+
+            <td>
+
+                <a href="/graph/current" class="graph-link">
+                    View Graph
+                </a>
+
+            </td>
+
+        </tr>
+
+        <tr>
+
+            <td>Power (W)</td>
+
+            <td id="pa">0</td>
+
+            <td id="pb">0</td>
+
+            <td id="pc">0</td>
+
+            <td>
+
+                <a href="/graph/power" class="graph-link">
+                    View Graph
+                </a>
+
+            </td>
+
+        </tr>
+
+        <tr>
+
+            <td>Energy (kWh)</td>
+
+            <td id="ea">0.000</td>
+
+            <td id="eb">0.000</td>
+
+            <td id="ec">0.000</td>
+
+            <td>
+
+                <a href="/graph/energy" class="graph-link">
+
+                    View Graph
+
+                </a>
+
+            </td>
+
+        </tr>
+
+        <tr>
+
+            <td>Total Power (W)</td>
+
+            <td colspan="3" id="totalPower">0</td>
+
+            <td>-</td>
+
+        </tr>
+
+        <tr>
+
+            <a href="/graph/energy" class="graph-link">
+                View Graph
+            </a>
+
+            </td>
+
+        </tr>
+
+        <tr>
+
+            <td>Average Power Factor</td>
+
+            <td colspan="3" id="avgPF">0.00</td>
+
+            <td>-</td>
+
+        </tr>
+
+        <tr>
+
+            <td>Frequency (Hz)</td>
+
+            <td colspan="3" id="meterFreq">50.0</td>
+
+            <td>-</td>
+
+        </tr>
+
+    </tbody>
+
+</table>
+
+</section>
+
+</div>
+<footer>
+
+    <p>
+
+        Smart Energy Monitoring System • PZEM-004T • Flask Dashboard
+
+    </p>
+
+</footer>
+
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+
+</html>

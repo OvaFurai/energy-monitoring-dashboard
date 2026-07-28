@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ graph_type|capitalize }} Graph</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <script src="{{ url_for('static', filename='js/chart.min.js') }}"></script>
+
+</head>
+
+<body>
+
+<div class="background"></div>
+
+<header>
+
+    <div class="title">
+
+        <h1>⚡ SMART ENERGY MONITORING SYSTEM</h1>
+
+        <p>{{ graph_type|capitalize }} History</p>
+
+    </div>
+
+</header>
+
+<section class="graphs">
+
+    <div class="graph-card">
+
+        <h2 id="graphTitle"></h2>
+
+        <canvas id="graphCanvas"></canvas>
+
+    </div>
+
+</section>
+
+<div style="text-align:center; margin:30px;">
+
+    <a href="/" class="graph-link">← Back to Dashboard</a>
+
+</div>
+
+<script>
+
+const graphType = "{{ graph_type }}";
+
+document.getElementById("graphTitle").innerText =
+graphType.charAt(0).toUpperCase() +
+graphType.slice(1) +
+" History";
+
+</script>
+
+<script src="{{ url_for('static', filename='js/graph.js') }}"></script>
+
+</body>
+
+</html>
