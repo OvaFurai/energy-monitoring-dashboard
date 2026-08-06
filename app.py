@@ -6,6 +6,7 @@ from flask import Flask, render_template, request, jsonify
 import random
 from collections import deque
 import datetime
+import sqlite3
 
 app = Flask(__name__)
 
@@ -24,6 +25,27 @@ latest = {
 }
 
 SAVE_FILE = "latest_data.json"
+DB_FILE = "energy_history.db"
+
+def init_db():
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS readings (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            timestamp TEXT NOT NULL,
+            voltage REAL,
+            current REAL,
+            power REAL,
+            energy REAL,
+            frequency REAL,
+            pf REAL
+        )
+    """)
+
+    conn.commit()
+    conn.close()
 
 if os.path.exists(SAVE_FILE):
     try:
@@ -283,6 +305,8 @@ def udp_discovery():
             print(f"Discovery Reply -> {addr[0]}")
             
 if __name__ == "__main__":
+
+    init_db()
 
     threading.Thread(
         target=udp_discovery,
