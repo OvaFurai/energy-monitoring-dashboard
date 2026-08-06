@@ -303,10 +303,10 @@ def udp_discovery():
             sock.sendto(reply.encode(), addr)
 
             print(f"Discovery Reply -> {addr[0]}")
+
+init_db()
             
 if __name__ == "__main__":
-
-    init_db()
 
     threading.Thread(
         target=udp_discovery,
