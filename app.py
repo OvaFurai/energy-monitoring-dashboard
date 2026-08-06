@@ -208,6 +208,7 @@ def update():
 
     # Save reading to SQLite database
     # Save reading to SQLite database
+    print("DB:", DB_FILE)
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
 
@@ -226,6 +227,7 @@ def update():
     ))
 
     conn.commit()
+    print("Saved to database")
     conn.close()
 
     with open(SAVE_FILE, "w") as f:
