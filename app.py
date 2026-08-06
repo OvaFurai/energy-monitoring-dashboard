@@ -25,8 +25,7 @@ latest = {
 }
 
 SAVE_FILE = "latest_data.json"
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DB_FILE = os.path.join(BASE_DIR, "energy_history.db")
+DB_FILE = "/home/ovafurai/energy_history.db"
 
 def init_db():
     conn = sqlite3.connect(DB_FILE)
