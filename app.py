@@ -204,6 +204,27 @@ def update():
     latest["frequency"] = float(data.get("frequency",0))
     latest["pf"] = float(data.get("pf",0))
     latest["time"] = datetime.datetime.now().strftime("%H:%M:%S")
+
+    # Save reading to SQLite database
+conn = sqlite3.connect(DB_FILE)
+cursor = conn.cursor()
+
+cursor.execute("""
+    INSERT INTO readings
+    (timestamp, voltage, current, power, energy, frequency, pf)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+""", (
+    datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+    latest["voltage"],
+    latest["current"],
+    latest["power"],
+    latest["energy"],
+    latest["frequency"],
+    latest["pf"]
+))
+
+conn.commit()
+conn.close()
     
     with open(SAVE_FILE, "w") as f:
      json.dump(latest, f)
