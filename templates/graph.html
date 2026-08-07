@@ -33,13 +33,26 @@
 
 <section class="graphs">
 
-    <div class="graph-card">
+<div class="graph-card">
+
+    <div class="graph-header">
 
         <h2 id="graphTitle"></h2>
 
-        <canvas id="graphCanvas"></canvas>
+        <div class="range-buttons">
+
+            <button class="range-btn active" data-days="1">1D</button>
+            <button class="range-btn" data-days="3">3D</button>
+            <button class="range-btn" data-days="7">7D</button>
+            <button class="range-btn" data-days="30">30D</button>
+
+        </div>
 
     </div>
+
+    <canvas id="graphCanvas"></canvas>
+
+</div>
 
 </section>
 
