@@ -262,8 +262,8 @@ def powermeter_data():
 # Graph Data
 # ==============================
 
-@app.route("/history")
-def history_data():
+@app.route("/graph/history")
+def graph_history():
 
     return jsonify({
         "labels": list(history["labels"]),
@@ -274,6 +274,31 @@ def history_data():
         "frequency": list(history["frequency"]),
         "pf": list(history["pf"])
     })
+
+@app.route("/history")
+def history_page():
+    return render_template("history.html")
+
+
+@app.route("/history/data")
+def history_table():
+
+    conn = sqlite3.connect(DB_FILE)
+    conn.row_factory = sqlite3.Row
+
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT *
+        FROM readings
+        ORDER BY timestamp DESC
+    """)
+
+    rows = cursor.fetchall()
+
+    conn.close()
+
+    return jsonify([dict(row) for row in rows])
 
 @app.route("/graph/<graph_type>")
 def graph(graph_type):
