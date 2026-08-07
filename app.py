@@ -343,22 +343,54 @@ def graph(graph_type):
 @app.route("/powermeter/history")
 def powermeter_history():
 
+    days = request.args.get("days", "1")
+
+    conn = sqlite3.connect(DB_FILE)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+
+    if days == "all":
+        cursor.execute("""
+            SELECT *
+            FROM readings
+            ORDER BY timestamp ASC
+        """)
+    else:
+        cursor.execute("""
+            SELECT *
+            FROM readings
+            WHERE timestamp >= datetime('now', ?)
+            ORDER BY timestamp ASC
+        """, (f"-{days} day",))
+
+    rows = cursor.fetchall()
+    conn.close()
+
+    labels = []
+    voltage = []
+    current = []
+    power = []
+    energy = []
+
+    for row in rows:
+        labels.append(row["timestamp"])
+        voltage.append(row["voltage"])
+        current.append(row["current"])
+        power.append(row["power"])
+        energy.append(row["energy"])
+
     return jsonify({
-        "labels": list(meter_history["labels"]),
-
-        "va": list(meter_history["va"]),
-        "vb": list(meter_history["vb"]),
-        "vc": list(meter_history["vc"]),
-
-        "ia": list(meter_history["ia"]),
-        "ib": list(meter_history["ib"]),
-        "ic": list(meter_history["ic"]),
-
-        "pa": list(meter_history["pa"]),
-        "pb": list(meter_history["pb"]),
-        "pc": list(meter_history["pc"]),
-
-        "totalEnergy": list(meter_history["totalEnergy"])
+        "labels": labels,
+        "va": voltage,
+        "vb": voltage,
+        "vc": voltage,
+        "ia": current,
+        "ib": current,
+        "ic": current,
+        "pa": power,
+        "pb": power,
+        "pc": power,
+        "totalEnergy": energy
     })
 # ==============================
 # Run
