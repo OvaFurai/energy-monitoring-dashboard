@@ -668,5 +668,37 @@ footer{
     white-space:nowrap;
 
 }
+.graph-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
 
+.range-buttons{
+    display:flex;
+    gap:10px;
+}
+
+.range-btn{
+    background:#2b3548;
+    color:white;
+    border:none;
+    padding:8px 16px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+    transition:0.2s;
+}
+
+.range-btn:hover{
+    background:#19d3ff;
+    color:#111;
+}
+
+.range-btn.active{
+    background:#19d3ff;
+    color:#111;
+}
+    
 }
