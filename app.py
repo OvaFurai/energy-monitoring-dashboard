@@ -2,7 +2,7 @@ import json
 import os
 import socket
 import threading
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, Response
 import random
 from collections import deque
 import datetime
@@ -299,6 +299,42 @@ def history_table():
     conn.close()
 
     return jsonify([dict(row) for row in rows])
+
+@app.route("/download")
+def download_csv():
+
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT
+            timestamp,
+            voltage,
+            current,
+            power,
+            energy,
+            frequency,
+            pf
+        FROM readings
+        ORDER BY timestamp DESC
+    """)
+
+    rows = cursor.fetchall()
+    conn.close()
+
+    csv_data = "Timestamp,Voltage,Current,Power,Energy,Frequency,PowerFactor\n"
+
+    for row in rows:
+        csv_data += ",".join(str(x) for x in row) + "\n"
+
+    return Response(
+        csv_data,
+        mimetype="text/csv",
+        headers={
+            "Content-Disposition":
+            "attachment; filename=energy_history.csv"
+        }
+    )
 
 @app.route("/graph/<graph_type>")
 def graph(graph_type):
