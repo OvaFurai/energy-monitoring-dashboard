@@ -1,3 +1,4 @@
+let selectedDays = 1;
 const ctx = document.getElementById("graphCanvas").getContext("2d");
 
 let chart = new Chart(ctx, {
@@ -24,7 +25,7 @@ let chart = new Chart(ctx, {
 
 async function updateGraph() {
 
-    const response = await fetch("/powermeter/history");
+    const response = await fetch(`/powermeter/history?days=${selectedDays}`);
     const data = await response.json();
 
     chart.data.labels = data.labels;
@@ -108,6 +109,24 @@ async function updateGraph() {
 
     chart.update();
 }
+
+document.querySelectorAll(".range-btn").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        document.querySelectorAll(".range-btn").forEach(btn =>
+            btn.classList.remove("active")
+        );
+
+        button.classList.add("active");
+
+        selectedDays = button.dataset.days;
+
+        updateGraph();
+
+    });
+
+});
 
 updateGraph();
 setInterval(updateGraph, 2000);
